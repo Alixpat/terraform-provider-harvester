@@ -32,6 +32,7 @@ const (
 	FieldVirtualMachineBlockMultiQueue            = "block_multi_queue"
 	FieldVirtualMachineIOThreadsPolicy            = "io_threads_policy"
 	FieldVirtualMachineIOThreadsCount             = "io_threads_count"
+	FieldVirtualMachineHostDevice                 = "host_device"
 
 	StateVirtualMachineStarting = "Starting"
 	StateVirtualMachineRunning  = "Running"
@@ -100,4 +101,15 @@ const (
 
 const (
 	LabelSSHUsername = "ssh-user"
+)
+
+const (
+	DiskCacheModeNone         = "none"
+	DiskCacheModeWriteBack    = "writeback"
+	DiskCacheModeWriteThrough = "writethrough"
+)
+
+const (
+	FieldHostDeviceName       = "name"
+	FieldHostDeviceDeviceName = "device_name"
 )

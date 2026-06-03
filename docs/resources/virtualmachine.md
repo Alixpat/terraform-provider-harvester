@@ -203,6 +203,7 @@ resource "harvester_virtualmachine" "opensuse154" {
 - `create_initial_snapshot` (Boolean) Create an initial snapshot named {vm-name}-initial after the VM is created and ready
 - `description` (String) Any text you want that better describes this resource
 - `efi` (Boolean)
+- `host_device` (Block List) Attaches a host device to the VM (see [below for nested schema](#nestedblock--host_device))
 - `hostname` (String)
 - `input` (Block List) (see [below for nested schema](#nestedblock--input))
 - `io_threads_count` (Number) Number of IOThreads to allocate, only valid when io_threads_policy is "supplementalPool"
@@ -297,6 +298,15 @@ Optional:
 - `user_data` (String)
 - `user_data_base64` (String)
 - `user_data_secret_name` (String)
+
+
+<a id="nestedblock--host_device"></a>
+### Nested Schema for `host_device`
+
+Optional:
+
+- `device_name` (String) Device name (resource name) of the host device
+- `name` (String) Name of the host device
 
 
 <a id="nestedblock--input"></a>

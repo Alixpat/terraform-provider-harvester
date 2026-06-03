@@ -504,6 +504,26 @@ func (c *Constructor) Setup() util.Processors {
 				return nil
 			},
 		},
+		{
+			Field: constants.FieldVirtualMachineHostDevice,
+			Parser: func(i interface{}) error {
+				v := i.(map[string]interface{})
+				name := v[constants.FieldHostDeviceName].(string)
+				deviceName := v[constants.FieldHostDeviceDeviceName].(string)
+				devices := &vmBuilder.VirtualMachine.Spec.Template.Spec.Domain.Devices
+				for idx := range devices.HostDevices {
+					if devices.HostDevices[idx].Name == name {
+						devices.HostDevices[idx].DeviceName = deviceName
+						return nil
+					}
+				}
+				devices.HostDevices = append(devices.HostDevices, kubevirtv1.HostDevice{
+					Name:       name,
+					DeviceName: deviceName,
+				})
+				return nil
+			},
+		},
 	}
 	return append(processors, customProcessors...)
 }

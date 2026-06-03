@@ -5,6 +5,8 @@ go 1.26.4
 replace (
 	github.com/google/gnostic-models => github.com/google/gnostic-models v0.6.9
 
+	github.com/harvester/pcidevices => github.com/harvester/pcidevices v0.0.0-20260317225112-9a141ebabdb0
+
 	github.com/openshift/api => github.com/openshift/api v0.0.0-20191219222812-2987a591a72c
 	github.com/openshift/client-go => github.com/openshift/client-go v0.0.0-20200521150516-05eb9880269c
 
@@ -23,8 +25,9 @@ replace (
 require (
 	github.com/google/uuid v1.6.0
 	github.com/harvester/harvester v1.8.0
-	github.com/harvester/harvester-load-balancer v1.5.0
-	github.com/harvester/harvester-network-controller v1.6.0-rc3
+	github.com/harvester/harvester-load-balancer v1.7.1
+	github.com/harvester/harvester-network-controller v1.7.1
+	github.com/harvester/pcidevices v1.7.1
 	github.com/hashicorp/terraform-plugin-docs v0.22.0
 	github.com/hashicorp/terraform-plugin-log v0.9.0
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.37.0
@@ -49,6 +52,7 @@ require (
 	github.com/Masterminds/semver/v3 v3.4.0 // indirect
 	github.com/Masterminds/sprig/v3 v3.3.0 // indirect
 	github.com/ProtonMail/go-crypto v1.1.6 // indirect
+	github.com/StackExchange/wmi v1.2.1 // indirect
 	github.com/achanda/go-sysctl v0.0.0-20160222034550-6be7678c45d2 // indirect
 	github.com/agext/levenshtein v1.2.2 // indirect
 	github.com/apparentlymart/go-textseg/v15 v15.0.0 // indirect
@@ -113,6 +117,8 @@ require (
 	github.com/hashicorp/yamux v0.1.1 // indirect
 	github.com/huandu/xstrings v1.5.0 // indirect
 	github.com/iancoleman/orderedmap v0.3.0 // indirect
+	github.com/jaypipes/ghw v0.9.0 // indirect
+	github.com/jaypipes/pcidb v1.0.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/k8snetworkplumbingwg/whereabouts v0.9.3 // indirect
@@ -152,15 +158,15 @@ require (
 	github.com/prometheus/client_model v0.6.2 // indirect
 	github.com/prometheus/common v0.66.1 // indirect
 	github.com/prometheus/procfs v0.17.0 // indirect
-	github.com/rancher/aks-operator v1.11.5 // indirect
-	github.com/rancher/eks-operator v1.11.5 // indirect
-	github.com/rancher/fleet/pkg/apis v0.12.3 // indirect
-	github.com/rancher/gke-operator v1.11.5 // indirect
+	github.com/rancher/aks-operator v1.12.0 // indirect
+	github.com/rancher/eks-operator v1.12.0 // indirect
+	github.com/rancher/fleet/pkg/apis v0.13.0 // indirect
+	github.com/rancher/gke-operator v1.12.0 // indirect
 	github.com/rancher/lasso v0.2.3 // indirect
 	github.com/rancher/norman v0.7.0 // indirect
 	github.com/rancher/rancher/pkg/apis v0.0.0 // indirect
 	github.com/rancher/rke v1.8.5 // indirect
-	github.com/rancher/system-upgrade-controller/pkg/apis v0.0.0-20250306000150-b1a9781accab // indirect
+	github.com/rancher/system-upgrade-controller/pkg/apis v0.0.0-20250710162344-185ff9f785cd // indirect
 	github.com/rancher/wrangler v1.1.2 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/robfig/cron v1.2.0 // indirect
@@ -214,7 +220,7 @@ require (
 	kubevirt.io/containerized-data-importer-api v1.64.0 // indirect
 	kubevirt.io/controller-lifecycle-operator-sdk/api v0.2.4 // indirect
 	kubevirt.io/kubevirt v1.7.0 // indirect
-	sigs.k8s.io/cluster-api v1.9.5 // indirect
+	sigs.k8s.io/cluster-api v1.10.2 // indirect
 	sigs.k8s.io/controller-runtime v0.21.0 // indirect
 	sigs.k8s.io/json v0.0.0-20241014173422-cfa47c3a1cc8 // indirect
 	sigs.k8s.io/randfill v1.0.0 // indirect
