@@ -54,6 +54,12 @@ const (
 	FieldCloudInitUserDataSecretName    = "user_data_secret_name"
 )
 
+// NetworkInterfaceBindingManagedTap is the KubeVirt binding plugin that the
+// Harvester webhook swaps in for Bridge on kube-ovn networks. The upstream
+// builder (harvester/pkg/builder) can only set Bridge or Masquerade, so this
+// binding is never written by the provider, only read back.
+const NetworkInterfaceBindingManagedTap = "managedtap"
+
 const (
 	FieldNetworkInterfaceName          = "name"
 	FieldNetworkInterfaceType          = "type"

@@ -192,6 +192,15 @@ func (v *VMImporter) NetworkInterface() ([]map[string]interface{}, error) {
 			interfaceType = builder.NetworkInterfaceTypeBridge
 		} else if networkInterface.Masquerade != nil {
 			interfaceType = builder.NetworkInterfaceTypeMasquerade
+		} else if networkInterface.Binding != nil &&
+			networkInterface.Binding.Name == constants.NetworkInterfaceBindingManagedTap {
+			// On a kube-ovn network the Harvester webhook replaces the Bridge
+			// binding method with the managedtap binding plugin. Report the
+			// requested type, Bridge, rather than the effective binding:
+			// surfacing managedtap would make state diverge from config on
+			// every plan, terraform would try to restore Bridge, the webhook
+			// would swap it back, and the drift would never settle.
+			interfaceType = builder.NetworkInterfaceTypeBridge
 		} else {
 			return nil, fmt.Errorf("unsupported type found on network %s. ", networkInterface.Name)
 		}

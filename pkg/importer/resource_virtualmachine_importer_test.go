@@ -34,6 +34,49 @@ func TestNetworkInterface(t *testing.T) {
 
 	testcases := []testcase{
 		{
+			// a VM whose interface carries the managedtap binding plugin: Harvester
+			// substitutes it for Bridge on kube-ovn networks. The importer must
+			// report the requested type, Bridge, so that state matches config.
+			importer: &VMImporter{
+				VirtualMachine: &kubevirtv1.VirtualMachine{
+					Spec: kubevirtv1.VirtualMachineSpec{
+						Template: &kubevirtv1.VirtualMachineInstanceTemplateSpec{
+							ObjectMeta: metav1.ObjectMeta{
+								Annotations: map[string]string{},
+							},
+							Spec: kubevirtv1.VirtualMachineInstanceSpec{
+								Domain: kubevirtv1.DomainSpec{
+									Devices: kubevirtv1.Devices{
+										Interfaces: []kubevirtv1.Interface{
+											{
+												Binding: &kubevirtv1.PluginBinding{
+													Name: constants.NetworkInterfaceBindingManagedTap,
+												},
+												BootOrder: &[]uint{1}[0],
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				VirtualMachineInstance: &kubevirtv1.VirtualMachineInstance{},
+			},
+			expectation: []map[string]interface{}{
+				{
+					constants.FieldNetworkInterfaceName:         "",
+					constants.FieldNetworkInterfaceType:         builder.NetworkInterfaceTypeBridge,
+					constants.FieldNetworkInterfaceModel:        "",
+					constants.FieldNetworkInterfaceMACAddress:   "",
+					constants.FieldNetworkInterfaceNetworkName:  "",
+					constants.FieldNetworkInterfaceBootOrder:    &[]uint{1}[0],
+					constants.FieldNetworkInterfaceWaitForLease: false,
+				},
+			},
+			expectError: nil,
+		},
+		{
 			// a VM that doesn't have any network interface
 			importer: &VMImporter{
 				VirtualMachine: &kubevirtv1.VirtualMachine{
