@@ -1,0 +1,99 @@
+# Fork release: builds the provider for linux and publishes it as a
+# filesystem-mirror archive for airgapped consumers, under the
+# registry.terraform.io/alixpat/harvester address.
+#
+# Unlike release.yml, this needs no GPG key and no Vault secret: the archive
+# is attached to a GitHub release created with the workflow token.
+name: release-mirror
+on:
+  push:
+    tags:
+    - v*
+jobs:
+  mirror:
+    name: Build and publish mirror archive
+    if: ${{ github.repository_owner == 'Alixpat' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      TAG: ${{ github.ref_name }}
+      NAMESPACE: alixpat
+      TYPE: harvester
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+
+    - name: Set up Go
+      uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5
+      with:
+        go-version-file: go.mod
+
+    - name: Test
+      run: go test ./...
+
+    - name: Build mirror tree
+      run: |
+        version="${TAG#v}"
+        for arch in amd64 arm64; do
+          dir="mirror/registry.terraform.io/${NAMESPACE}/${TYPE}/${version}/linux_${arch}"
+          mkdir -p "$dir"
+          CGO_ENABLED=0 GOOS=linux GOARCH="$arch" go build -trimpath \
+            -ldflags "-s -w -X main.version=${version} -X main.commit=${GITHUB_SHA}" \
+            -o "$dir/terraform-provider-${TYPE}_${TAG}"
+        done
+        archive="terraform-provider-${TYPE}_${version}_${NAMESPACE}_mirror.tar.gz"
+        tar -C mirror -czf "$archive" registry.terraform.io
+        sha256sum "$archive" > "$archive.sha256"
+        tar -tzvf "$archive"
+        echo "ARCHIVE=$archive" >> "$GITHUB_ENV"
+        echo "VERSION=$version" >> "$GITHUB_ENV"
+
+    - name: Write release notes
+      run: |
+        # actions/checkout does not fetch the annotated tag object.
+        git fetch --force origin "refs/tags/${TAG}:refs/tags/${TAG}"
+        git tag -l --format='%(contents)' "$TAG" > notes.md
+        cat >> notes.md <<EOF
+
+        ## Installation (filesystem mirror airgap)
+
+        \`\`\`bash
+        sudo mkdir -p /opt/terraform-providers
+        sudo tar -xzf ${ARCHIVE} -C /opt/terraform-providers
+        \`\`\`
+
+        \`~/.terraformrc\` :
+
+        \`\`\`hcl
+        provider_installation {
+          filesystem_mirror {
+            path    = "/opt/terraform-providers"
+            include = ["registry.terraform.io/${NAMESPACE}/*"]
+          }
+          direct {
+            exclude = ["registry.terraform.io/${NAMESPACE}/*"]
+          }
+        }
+        \`\`\`
+
+        \`\`\`hcl
+        terraform {
+          required_providers {
+            harvester = {
+              source  = "${NAMESPACE}/${TYPE}"
+              version = "${VERSION}"
+            }
+          }
+        }
+        \`\`\`
+        EOF
+
+    - name: Publish release
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        prerelease=""
+        [[ "$TAG" == *-* ]] && prerelease="--prerelease"
+        gh release create "$TAG" "$ARCHIVE" "$ARCHIVE.sha256" \
+          --title "$TAG" --notes-file notes.md --verify-tag $prerelease

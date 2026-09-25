@@ -16,6 +16,8 @@ on:
     - published
 jobs:
   goreleaser:
+    # Needs the upstream GPG secrets; forks publish through release-mirror.yml.
+    if: ${{ github.repository_owner == 'harvester' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
