@@ -170,6 +170,12 @@ please use %s instead of this deprecated field:
 			Optional:    true,
 			Default:     false,
 		},
+		constants.FieldVirtualMachineHugepagesPageSize: {
+			Type:         schema.TypeString,
+			Description:  "Back the guest memory with hugepages of this size, which must be preallocated on the node, more info: https://kubevirt.io/user-guide/compute/virtual_hardware/#hugepages",
+			Optional:     true,
+			ValidateFunc: validation.StringInSlice([]string{"2Mi", "1Gi", ""}, false),
+		},
 		constants.FieldVirtualMachineNetworkInterfaceMultiqueue: {
 			Type:        schema.TypeBool,
 			Description: "Enable multiqueue on virtio network interfaces, allocating one queue per vCPU. Improves network throughput on VMs with multiple vCPUs.",

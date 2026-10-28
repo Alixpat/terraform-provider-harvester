@@ -107,6 +107,14 @@ func (v *VMImporter) IOThreadsCount() int {
 	return int(*ioThreads.SupplementalPoolThreadCount)
 }
 
+func (v *VMImporter) HugepagesPageSize() string {
+	memory := v.VirtualMachine.Spec.Template.Spec.Domain.Memory
+	if memory == nil || memory.Hugepages == nil {
+		return ""
+	}
+	return memory.Hugepages.PageSize
+}
+
 func (v *VMImporter) EFI() bool {
 	firmware := v.VirtualMachine.Spec.Template.Spec.Domain.Firmware
 	return firmware != nil && firmware.Bootloader != nil && firmware.Bootloader.EFI != nil
@@ -469,6 +477,7 @@ func ResourceVirtualMachineStateGetter(vm *kubevirtv1.VirtualMachine, vmi *kubev
 			constants.FieldVirtualMachineBlockMultiQueue:            vmImporter.BlockMultiQueue(),
 			constants.FieldVirtualMachineIOThreadsPolicy:            vmImporter.IOThreadsPolicy(),
 			constants.FieldVirtualMachineIOThreadsCount:             vmImporter.IOThreadsCount(),
+			constants.FieldVirtualMachineHugepagesPageSize:          vmImporter.HugepagesPageSize(),
 			constants.FieldVirtualMachineNodeSelector:               vm.Spec.Template.Spec.NodeSelector,
 		},
 	}, nil

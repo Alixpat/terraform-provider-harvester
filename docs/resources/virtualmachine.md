@@ -205,6 +205,7 @@ resource "harvester_virtualmachine" "opensuse154" {
 - `efi` (Boolean)
 - `host_device` (Block List) Attaches a host device to the VM (see [below for nested schema](#nestedblock--host_device))
 - `hostname` (String)
+- `hugepages_page_size` (String) Back the guest memory with hugepages of this size, which must be preallocated on the node, more info: https://kubevirt.io/user-guide/compute/virtual_hardware/#hugepages
 - `input` (Block List) (see [below for nested schema](#nestedblock--input))
 - `io_threads_count` (Number) Number of IOThreads to allocate, only valid when io_threads_policy is "supplementalPool"
 - `io_threads_policy` (String) IOThreads policy for the virtual machine, more info: https://kubevirt.io/user-guide/compute/dedicated_cpu_resources/#requesting-dedicated-cpu-for-qemu-emulator

@@ -32,6 +32,7 @@ const (
 	FieldVirtualMachineBlockMultiQueue            = "block_multi_queue"
 	FieldVirtualMachineIOThreadsPolicy            = "io_threads_policy"
 	FieldVirtualMachineIOThreadsCount             = "io_threads_count"
+	FieldVirtualMachineHugepagesPageSize          = "hugepages_page_size"
 	FieldVirtualMachineHostDevice                 = "host_device"
 
 	StateVirtualMachineStarting = "Starting"

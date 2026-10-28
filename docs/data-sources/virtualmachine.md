@@ -48,6 +48,7 @@ data "harvester_virtualmachine" "opensuse154" {
 - `efi` (Boolean)
 - `host_device` (List of Object) Attaches a host device to the VM (see [below for nested schema](#nestedatt--host_device))
 - `hostname` (String)
+- `hugepages_page_size` (String) Back the guest memory with hugepages of this size, which must be preallocated on the node, more info: https://kubevirt.io/user-guide/compute/virtual_hardware/#hugepages
 - `id` (String) The ID of this resource.
 - `input` (List of Object) (see [below for nested schema](#nestedatt--input))
 - `io_threads_count` (Number) Number of IOThreads to allocate, only valid when io_threads_policy is "supplementalPool"
